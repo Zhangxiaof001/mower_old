@@ -12,4 +12,6 @@
     <param name="battery_full_voltage" value="28.0"/>
   </node>
 
+  <node pkg="mower_logic" type="pub_odometry" name="pub_odometry" output="screen" required="true"/>
+
 </launch>
