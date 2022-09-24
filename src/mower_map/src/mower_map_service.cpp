@@ -374,7 +374,7 @@ void buildMap() {
  */
 void saveMapToFile() {
     rosbag::Bag bag;
-    bag.open("map.bag", rosbag::bagmode::Write);
+    bag.open("/home/zxf/projects/open_mower_ros/record_map.bag", rosbag::bagmode::Write);
 
     for (auto &area: mowing_areas) {
         bag.write("mowing_areas", ros::Time::now(), area);
@@ -575,7 +575,6 @@ bool clearNavPoint(mower_map::ClearNavPointSrvRequest &req, mower_map::ClearNavP
     return true;
 }
 
-
 int main(int argc, char **argv) {
     ros::init(argc, argv, "mower_map_service");
 
@@ -587,7 +586,7 @@ int main(int argc, char **argv) {
     map_server_viz_array_pub = n.advertise<visualization_msgs::MarkerArray>("mower_map_service/map_viz", 10, true);
 
     // Load the default map file
-    readMapFromFile("/home/zxf/projects/open_mower_ros/map_test.bag");
+    readMapFromFile("/home/zxf/projects/open_mower_ros/record_map.bag");
 
     buildMap();
 

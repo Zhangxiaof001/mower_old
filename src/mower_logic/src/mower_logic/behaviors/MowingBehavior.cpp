@@ -138,9 +138,10 @@ bool MowingBehavior::create_mowing_plan(int area_index) {
   pathSrv.request.holes = mapSrv.response.area.obstacles;
   pathSrv.request.fill_type =
       slic3r_coverage_planner::PlanPathRequest::FILL_LINEAR;
-  pathSrv.request.outer_offset = config.outline_offset;
+  // pathSrv.request.outer_offset = config.outline_offset;
+  pathSrv.request.outer_offset = 0.2;
   // pathSrv.request.distance = config.tool_width;
-  pathSrv.request.distance = 0.2;
+  pathSrv.request.distance = 0.5;
   ROS_INFO("[coverage planner] angle:%f, distance:%f", pathSrv.request.angle, pathSrv.request.distance);
   if (!pathClient.call(pathSrv)) {
     ROS_ERROR_STREAM("Error during coverage planning");
@@ -170,12 +171,12 @@ bool MowingBehavior::execute_mowing_plan() {
     // Drive to first point of the path segment
     // 1.先导航去路径的初始点
     {
-      if (path.is_outline && last_config.add_fake_obstacle) {
-        mower_map::SetNavPointSrv set_nav_point_srv;
-        set_nav_point_srv.request.nav_pose = path.path.poses.front().pose;
-        setNavPointClient.call(set_nav_point_srv);
-        sleep(1);
-      }
+      // if (path.is_outline && last_config.add_fake_obstacle) {
+      //   mower_map::SetNavPointSrv set_nav_point_srv;
+      //   set_nav_point_srv.request.nav_pose = path.path.poses.front().pose;
+      //   setNavPointClient.call(set_nav_point_srv);
+      //   sleep(1);
+      // }
 
       // 调用move_base
       mbf_msgs::MoveBaseGoal moveBaseGoal;
@@ -192,8 +193,8 @@ bool MowingBehavior::execute_mowing_plan() {
         continue;
       }
 
-      mower_map::ClearNavPointSrv clear_nav_point_srv;
-      clearNavPointClient.call(clear_nav_point_srv);
+      // mower_map::ClearNavPointSrv clear_nav_point_srv;
+      // clearNavPointClient.call(clear_nav_point_srv);
 
       // 调用vfh local planner
       // ros::NodeHandle n;
